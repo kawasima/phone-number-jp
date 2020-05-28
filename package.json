@@ -1,0 +1,23 @@
+{
+  "name": "phone-number-jp",
+  "version": "0.1.0",
+  "description": "The Japanese phone number parser and validator",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "repl": "node dev/repl.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kawasima/phone-number-jp.git"
+  },
+  "author": "kawasima",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kawasima/phone-number-jp/issues"
+  },
+  "homepage": "https://github.com/kawasima/phone-number-jp#readme",
+  "devDependencies": {
+    "xlsx": "^0.16.1"
+  }
+}

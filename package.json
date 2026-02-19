@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/kawasima/phone-number-jp#readme",
   "devDependencies": {
-    "xlsx": "^0.16.1"
+    "xlsx": "^0.17.0"
   }
 }

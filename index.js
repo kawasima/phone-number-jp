@@ -73,19 +73,31 @@ LandLinePhoneNumber.NUMBERS = require('./phoneNumbers');
  * Service phone number 付加的役務電話番号
  */
 class ServicePhoneNumber extends PhoneNumber {
-  static isApplicable(telNo) {
+  static isApplicable(s) {
+    if (typeof s !== 'string' && !(s instanceof String)) return false;
+    const prefix = ServicePhoneNumber.NUMBERS.find(n => s.startsWith(n.prefix));
+    return prefix && s.length === prefix.length;
   }
 
   static parse(s) {
+    const entry = ServicePhoneNumber.NUMBERS.find(n => s.startsWith(n.prefix) && s.length === n.length);
+    if (entry) {
+      return new ServicePhoneNumber(
+        entry.prefix,
+        s.substring(entry.prefix.length, s.length - entry.subscriberLength),
+        s.substring(s.length - entry.subscriberLength)
+      );
+    }
+    throw Error(`${s} is not a service phone number`);
   }
 }
 ServicePhoneNumber.NUMBERS = [
-  '0102',
-  '0170',
-  '0180',
-  '0570',
-  '0800',
-  '0990'
+  { prefix: '0120', length: 10, subscriberLength: 3 },
+  { prefix: '0170', length: 10, subscriberLength: 3 },
+  { prefix: '0180', length: 10, subscriberLength: 3 },
+  { prefix: '0570', length: 10, subscriberLength: 3 },
+  { prefix: '0800', length: 11, subscriberLength: 4 },
+  { prefix: '0990', length: 10, subscriberLength: 3 },
 ];
 
 /**
@@ -93,23 +105,31 @@ ServicePhoneNumber.NUMBERS = [
  */
 class M2MNumber extends PhoneNumber {
   static isApplicable(s) {
-    return M2MNumber.PATTERN.exec(s);
+    return M2MNumber.PATTERN_14.exec(s) || M2MNumber.PATTERN_11.exec(s);
   }
 
   static parse(s) {
-    const m = M2MNumber.PATTERN.exec(s);
-    if (m) {
+    const m14 = M2MNumber.PATTERN_14.exec(s);
+    if (m14) {
+      return new M2MNumber(
+        '0200',
+        s.substring(4, 9),
+        s.substring(9)
+      );
+    }
+    const m11 = M2MNumber.PATTERN_11.exec(s);
+    if (m11) {
       return new M2MNumber(
         '020',
-        s.substring(3,7),
+        s.substring(3, 7),
         s.substring(7)
       );
-    } else {
-      throw Error(`${s} is not an IP phone number`);
     }
+    throw Error(`${s} is not an M2M number`);
   }
 }
-M2MNumber.PATTERN = /^(020)([1-35-9]\d{3})(\d{4})$/;
+M2MNumber.PATTERN_14 = /^(0200)(\d{5})(\d{5})$/;
+M2MNumber.PATTERN_11 = /^(020)([1-35-9]\d{3})(\d{4})$/;
 
 /**
  * Mobile phone number 音声伝送携帯電話
@@ -128,7 +148,7 @@ class MobilePhoneNumber extends PhoneNumber {
     }
   }
 }
-MobilePhoneNumber.PATTERN = /^(070|080|090)([1-9]\d{3})(\d{4})$/;
+MobilePhoneNumber.PATTERN = /^(060|070|080|090)([1-9]\d{3})(\d{4})$/;
 
 /**
  * Pocket bell number 無線呼出番号
@@ -181,7 +201,7 @@ class FMCPhoneNumber extends PhoneNumber {
     }
   }
 }
-IPPhoneNumber.PATTERN = /^060(0\d{3})(\d{4})$/;
+FMCPhoneNumber.PATTERN = /^060(0\d{3})(\d{4})$/;
 
 
 /**

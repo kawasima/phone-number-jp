@@ -18,28 +18,29 @@ const phoneNumbers = {};
 
 Promise.all(
   [
-    '000124070.xls',
-    '000124071.xls',
-    '000124072.xls',
-    '000124073.xls',
-    '000124074.xls',
-    '000124075.xls',
-    '000124076.xls',
-    '000124077.xls',
-    '000124078.xls'
+    '000697543.xls',
+    '000697544.xls',
+    '000697545.xls',
+    '000697546.xls',
+    '000697548.xls',
+    '000697549.xls',
+    '000697550.xls',
+    '000697551.xls',
+    '000697552.xls'
   ].map(file => readXls(file))
 ).then(workbooks => {
   workbooks.forEach(workbook => {
     const sheet = workbook.Sheets['公開データ'];
     for (let r = 3; r < 65536; r++) {
       if (!sheet[`A${r}`]) break;
-      const areaCd = sheet[`D${r}`].v;
+      const areaCd = sheet[`C${r}`].v;
+      const localNumber = sheet[`D${r}`].v;
       phoneNumbers[areaCd] = {
         ...phoneNumbers[areaCd],
-        [sheet[`E${r}`].v]: {
-          MA: sheet[`B${r}`].v,
-          carrier: sheet[`F${r}`] ? sheet[`F${r}`].v : null,
-          status: sheet[`G${r}`] ? sheet[`G${r}`].v : null
+        [localNumber]: {
+          MA: sheet[`A${r}`].v,
+          carrier: sheet[`E${r}`] ? sheet[`E${r}`].v : null,
+          status: sheet[`F${r}`] ? sheet[`F${r}`].v : null
         }
       };
     }

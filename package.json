@@ -3,9 +3,26 @@
   "version": "0.1.0",
   "description": "The Japanese phone number parser and validator",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "phoneNumbers.json"
+  ],
+  "keywords": [
+    "phone-number",
+    "japan",
+    "japanese",
+    "parser",
+    "validator",
+    "telephone"
+  ],
   "scripts": {
     "test": "jest",
-    "repl": "node dev/repl.js"
+    "repl": "node dev/repl.js",
+    "import": "node dev/importer.js",
+    "audit": "npm audit --omit=dev"
+  },
+  "engines": {
+    "node": ">=14"
   },
   "repository": {
     "type": "git",
@@ -18,6 +35,7 @@
   },
   "homepage": "https://github.com/kawasima/phone-number-jp#readme",
   "devDependencies": {
+    "jest": "^30.2.0",
     "xlsx": "^0.17.0"
   }
 }
